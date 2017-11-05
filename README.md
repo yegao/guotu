@@ -427,57 +427,12 @@ general/news.html最后一行引用了require/general/news.js
 ```
 require/general/news.js的代码如下
 ```javascript
-var renderTopic = async function () {
-    var res = await api.cultureTopicList({curPage: 1, perPage: 100});
-    if (res && res.data && res.data.result) {
-        var list = res.data.result;
-        var i = 0, len = list.length;
-        for (; i < len; i++) {
-            var one = list[i];
-            if (one && one.isOpen) {
-                if (one.isNews) {
-                    var $_ul;
-                    $_ul = $('<ul class="content-box"><li class="title"><span>' + one.topic + '</span><a href="./news_list.html?'+one._id+'"><i class="fa fa-chevron-right" aria-hidden="true"></i></a></li></ul>');
-                    $_ul.data('tid', one._id);
-                    $('#news').append($_ul);
-                    await renderContent($_ul);
-                }
-                if (one.isExhibit) {
-                    $('#exhibit_show').append($('<a href="./news_list.html?'+one._id+'" class="exhibit-box"><img src="//cdn-icare.qingtime.cn/' + one.coverURL + '" alt="" /><p>' + one.topic + '</p></a>'));
-                }
-            }
-        }
-    }
-}
-var renderContent = async function (one) {
-    var res = await api.cultureContentList({
-        cultureTopicId: one.data('tid'),
-        curPage: 1,
-        perPage: 5
-    });
-    if (res && res.data && res.data.result) {
-        var result = res.data.result;
-        var len = result.length;
-        var $_box;
-        if (!one.children('.content-list').length) {
-            $_box = $('<div class="content-list"></div>');
-            one.append($_box);
-        }
-        else {
-            $_box = one.children('.content-list').eq(0);
-        }
-        if (!len) {
-            $_box.append('<p class="train-item">该栏目下暂时没有数据</p>');
-        }
-        else {
-            var i = 0;
-            for (; i < len; i++) {
-                var $_item = $('<li><a href="news_detail.html?' + result[i]._id + '" ><span>' + result[i].title + '</span></a></li>');
-                $_box.append($_item);
-            }
-        }
-    }
-}
+//、、、略 (定义一些全局函数,这个你先不管,主要看下面这段)
+/**
+* 下面这三行代码的意思就是说，先加载jquery，加载完jquery就加载common,$对应的就是jquery返回的module，其实就是jquery
+* 你加载完了common就会执行common里面的代码了（验证了用户token是否过期，得到了最新的用户信息，对公共组件绑定了事件等等）
+* 在jquery和common都已经加载完之后就开始执行回调处理(这里的例子是执行了'renderTopic();')
+*/
 require(['jquery','common'],function($){
     renderTopic();
 });
