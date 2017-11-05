@@ -139,6 +139,9 @@ $.fn.extend({
             }
         }
     },
+    /**
+     *上传文件到七牛,上传成功之后，返回的信息会放在clound中 $(it).data('clound',$(it).data('clound')+','+ key);
+     */
     qiniu:function(o){
         var url = o.url||'//icaretest.lifexp.cn/icare-api/upload/getUptoken';
         var token = o.token;
@@ -219,8 +222,7 @@ $.fn.extend({
         }
     },
     /**
-     * 
-     * 
+     * upload会调用上面的qiniu
      */
     upload:function(o){
         var url = o.url;
